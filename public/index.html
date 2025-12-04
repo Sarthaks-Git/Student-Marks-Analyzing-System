@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Marks Analyzing — Professional UI</title>
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #0b1220;
+      --muted: #6b7280;
+      --accent: #0d6efd;
+      --glass: rgba(13, 110, 253, 0.06);
+      --radius: 10px;
+    }
+
+    [data-theme='dark'] {
+      --bg: #071025;
+      --card: #071027;
+      --text: #e6eef8;
+      --muted: #9fb0d1;
+      --accent: #5aa8ff;
+      --glass: rgba(90, 168, 255, 0.06);
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding-bottom: 40px;
+    }
+
+    /* Top bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      background: transparent;
+      border-bottom: 1px solid rgba(2, 6, 23, 0.04);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(6px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), #60a5fa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(2, 6, 23, 0.08);
+      font-size: 16px;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 16px
+    }
+
+    .brand-sub {
+      font-size: 13px;
+      color: var(--muted)
+    }
+
+    /* container */
+    .container-main {
+      max-width: 1500px;
+      /* increased width */
+      margin: 26px auto;
+      padding: 0 20px;
+      /* slightly more breathing room */
+    }
+
+    /* cards */
+    .card-panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+      border: 1px solid rgba(2, 6, 23, 0.03);
+    }
+
+    h1.page-title {
+      font-size: 20px;
+      margin: 0 0 8px
+    }
+
+    .small-muted {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0
+    }
+
+    /* form elements */
+    .form-control {
+      border-radius: 8px;
+      border: 1px solid rgba(2, 6, 23, 0.06);
+      padding: .56rem .7rem;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .form-select {
+      border-radius: 8px
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    .btn-outline {
+      border-radius: 8px;
+      border: 1px solid rgba(2, 6, 23, 0.06);
+      background: transparent;
+      color: var(--text);
+    }
+
+    /* small UI tweaks */
+    .panel-grid {
+      display: grid;
+      /* left column flexible, right column wider for marks */
+      grid-template-columns: 1fr 760px;
+      gap: 18px
+    }
+
+    @media (max-width:1200px) {
+      .panel-grid {
+        grid-template-columns: 1fr 520px;
+      }
+    }
+
+    @media (max-width:1000px) {
+      .panel-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    }
+
+    .table-sm td,
+    .table-sm th {
+      vertical-align: middle;
+    }
+
+    /* prettified dark toggle (pill switch) */
+    .switch {
+      width: 54px;
+      height: 30px;
+      border-radius: 999px;
+      background: rgba(2, 6, 23, 0.06);
+      display: inline-flex;
+      align-items: center;
+      padding: 4px;
+      cursor: pointer;
+      position: relative;
+      transition: background .18s ease;
+    }
+
+    .switch[data-on='1'] {
+      background: linear-gradient(90deg, var(--accent), #60a5fa);
+    }
+
+    .switch .knob {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 6px 14px rgba(2, 6, 23, 0.12);
+      transition: transform .18s ease;
+      transform: translateX(0);
+    }
+
+    .switch[data-on='1'] .knob {
+      transform: translateX(24px);
+    }
+
+    /* slight input focus */
+    input.form-control:focus,
+    select.form-select:focus,
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 6px 20px rgba(13, 110, 253, 0.08);
+      border-color: rgba(13, 110, 253, 0.18);
+    }
+
+    /* subtle divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(2, 6, 23, 0.02), rgba(2, 6, 23, 0.02));
+      margin: 12px 0;
+      border-radius: 2px;
+    }
+
+    /* inline confirm small */
+    .inline-confirm {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .inline-confirm .btn-yes {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 13px
+    }
+
+    .inline-confirm .btn-no {
+      background: transparent;
+      border: 1px solid rgba(2, 6, 23, 0.06);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 13px
+    }
+
+    /* remove native number input arrows (desktop) */
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /*input[type=number] {
+      -moz-appearance: textfield;
+    }*/
+
+    /* ensure mark-input sizing consistent */
+    .mark-input {
+      width: 90px !important;
+      padding: .38rem .5rem;
+      border-radius: 6px;
+    }
+  </style>
+  <style>
+    /* DARK MODE TABLE & INPUT FIXES */
+    [data-theme='dark'] .table,
+    [data-theme='dark'] .table th,
+    [data-theme='dark'] .table td {
+      background: transparent !important;
+      color: #e6eef8 !important;
+      border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+
+    /* Make table header clearer and slightly elevated in dark mode */
+    [data-theme='dark'] .table th {
+      background: rgba(255, 255, 255, 0.02);
+      color: #d8e9ff;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Table body rows */
+    [data-theme='dark'] .table tbody tr {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
+    }
+
+    /* Inputs & selects in dark mode */
+    [data-theme='dark'] .form-control,
+    [data-theme='dark'] .form-select,
+    [data-theme='dark'] input[type="number"],
+    [data-theme='dark'] input[type="text"],
+    [data-theme='dark'] textarea {
+      background: #071826 !important;
+      color: #e6eef8 !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      box-shadow: none !important;
+    }
+
+    /* Make placeholder text visible */
+    [data-theme='dark'] ::placeholder {
+      color: rgba(230, 238, 248, 0.38) !important;
+      opacity: 1;
+    }
+
+    /* Specific mark-input widths & padding in the grid for dark mode */
+    [data-theme='dark'] .mark-input {
+      background: #071826 !important;
+      color: #e6eef8 !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      padding: .38rem .5rem;
+      border-radius: 6px;
+      width: 90px !important;
+    }
+
+    /* Table cell inner padding so inputs look tidy */
+    [data-theme='dark'] .table td {
+      padding: .45rem .6rem;
+    }
+
+    /* Make table header tiny hints (max|wt) more muted but readable */
+    [data-theme='dark'] .small-muted {
+      color: rgba(159, 176, 209, 0.85) !important;
+    }
+
+    /* Focus ring for accessibility in dark mode (gentle) */
+    [data-theme='dark'] .form-control:focus,
+    [data-theme='dark'] .form-select:focus {
+      box-shadow: 0 6px 20px rgba(91, 145, 255, 0.14) !important;
+      border-color: rgba(90, 168, 255, 0.28) !important;
+    }
+
+    /* If table uses <th> with white background override it */
+    [data-theme='dark'] table thead th {
+      background: rgba(255, 255, 255, 0.02) !important;
+    }
+
+    /* Ensure buttons still have contrast in dark mode */
+    [data-theme='dark'] .btn-success {
+      background: #188a46;
+      border-color: transparent;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo">MA</div>
+      <div>
+        <div class="brand-title">MarksAnalyser</div>
+        <div class="brand-sub">Student Marks — MVP</div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <label class="muted" for="role" style="margin:0 6px 0 0">Role</label>
+        <select id="role" class="form-select" style="min-width:160px">
+          <option value="admin">Admin</option>
+          <option value="teacher">Teacher</option>
+          <option value="student" selected>Student</option>
+        </select>
+      </div>
+
+      <!-- pretty toggle -->
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="muted">Dark</div>
+        <div id="darkSwitch" class="switch" role="button" aria-label="Toggle dark mode" tabindex="0" data-on="0">
+          <div class="knob"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="container-main">
+    <div class="card-panel">
+      <h1 class="page-title">Student Marks Analyzing — MVP</h1>
+      <p class="small-muted">Select a role to demo: Admin, Teacher, Student</p>
+      <div style="height:12px"></div>
+
+      <div id="app"></div>
+    </div>
+  </main>
+  <!-- TOAST ROOT (non-blocking notifications) -->
+  <div id="toastRoot"
+    style="position:fixed; right:18px; top:18px; z-index:1200; display:flex; flex-direction:column; gap:10px;"></div>
+
+  <script>
+    const API = '';
+
+    // Dark switch behaviour (keeps using localStorage 'marks_dark_mode')
+    (function () {
+      const sw = document.getElementById('darkSwitch');
+      function setOn(on) {
+        sw.setAttribute('data-on', on ? '1' : '0');
+        if (on) { document.documentElement.setAttribute('data-theme', 'dark'); localStorage.setItem('marks_dark_mode', '1'); }
+        else { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('marks_dark_mode', '0'); }
+      }
+      // initialize from storage
+      const saved = localStorage.getItem('marks_dark_mode');
+      setOn(saved === '1');
+
+      sw.addEventListener('click', () => setOn(sw.getAttribute('data-on') !== '1'));
+      sw.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOn(sw.getAttribute('data-on') !== '1'); } });
+    })();
+
+    // ---------- App routing ----------
+    document.getElementById('role').addEventListener('change', renderRole);
+    async function renderRole() {
+      const role = document.getElementById('role').value;
+      const app = document.getElementById('app');
+      app.innerHTML = '';
+      if (role === 'admin') {
+        app.innerHTML = adminHtml();
+        adminBind();
+      } else if (role === 'teacher') {
+        app.innerHTML = teacherHtml();
+        teacherBind();
+      } else {
+        app.innerHTML = studentHtml();
+        studentBind();
+      }
+    }
+    renderRole();
+
+    /* ---------- Non-blocking toast + inline status helper ---------- */
+    function toast(message, type = 'info', ms = 2600) {
+      const root = document.getElementById('toastRoot');
+      if (!root) return;
+      const colors = { info: '#0d6efd', success: '#198754', error: '#dc3545' };
+      const bg = type in colors ? colors[type] : colors.info;
+      const box = document.createElement('div');
+      box.style.minWidth = '240px';
+      box.style.maxWidth = '380px';
+      box.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))';
+      box.style.border = '1px solid rgba(255,255,255,0.06)';
+      box.style.color = 'var(--text, #0b1220)';
+      box.style.padding = '10px 12px';
+      box.style.borderRadius = '10px';
+      box.style.boxShadow = '0 8px 24px rgba(2,6,23,0.12)';
+      box.style.display = 'flex';
+      box.style.gap = '10px';
+      box.style.alignItems = 'center';
+      box.style.backdropFilter = 'blur(6px)';
+
+      const dot = document.createElement('div');
+      dot.style.width = '10px'; dot.style.height = '10px'; dot.style.borderRadius = '50%';
+      dot.style.background = bg;
+      dot.style.flex = '0 0 auto';
+      const txt = document.createElement('div'); txt.style.flex = '1'; txt.style.fontSize = '13px'; txt.innerText = message;
+      const close = document.createElement('button'); close.innerText = '✕';
+      close.style.border = 'none'; close.style.background = 'transparent'; close.style.cursor = 'pointer'; close.style.color = 'var(--muted,#6b7280)'; close.style.fontSize = '12px';
+      close.onclick = () => { box.remove(); };
+
+      box.appendChild(dot); box.appendChild(txt); box.appendChild(close);
+      root.appendChild(box);
+      setTimeout(() => { try { box.remove(); } catch (e) { } }, ms);
+    }
+
+    /* small helper to show inline status messages near a given element id */
+    function showInlineStatus(targetId, msg, kind = 'info', ms = 2600) {
+      const el = document.getElementById(targetId);
+      if (!el) return;
+      el.innerText = msg;
+      el.style.color = kind === 'error' ? '#ffb4b4' : (kind === 'success' ? '#b7f5d0' : 'var(--muted,#9aa9bf)');
+      // fade out
+      clearTimeout(el._hideTimer);
+      el._hideTimer = setTimeout(() => { el.innerText = ''; }, ms);
+    }
+
+    /* helper to render an inline confirm widget into a container element */
+    function renderInlineConfirm(containerEl, onYes, onNo) {
+      containerEl.innerHTML = '';
+      const wrapper = document.createElement('div');
+      wrapper.className = 'inline-confirm';
+      const yes = document.createElement('button');
+      yes.className = 'btn-yes';
+      yes.innerText = 'Yes';
+      const no = document.createElement('button');
+      no.className = 'btn-no';
+      no.innerText = 'No';
+      wrapper.appendChild(yes);
+      wrapper.appendChild(no);
+      containerEl.appendChild(wrapper);
+      yes.onclick = () => onYes();
+      no.onclick = () => onNo();
+    }
+
+    /* ---------- Admin view ---------- */
+    function adminHtml() {
+      return `
+  <div class="panel-grid" style="margin-top:12px">
+    <div class="card-panel">
+      <h4 style="margin-bottom:10px">Admin Dashboard</h4>
+      <div class="row g-2">
+        <div class="col-12 col-md-6">
+          <label class="muted">Create Subject</label>
+          <input id="s_code" placeholder="Code e.g. CS201" class="form-control mb-1"/>
+          <input id="s_title" placeholder="Title" class="form-control mb-1"/>
+          <input id="s_credits" type="number" value="3" class="form-control mb-1"/>
+          <button id="btn_create_subject" class="btn btn-primary mb-3">Create Subject</button>
+
+          <div class="divider"></div>
+
+          <label class="muted">Create Semester</label>
+          <input id="sem_name" placeholder="Semester name e.g. Sem 3 2025" class="form-control mb-1"/>
+          <input id="sem_ordinal" placeholder="Ordinal (1,2,...)" type="number" class="form-control mb-1"/>
+          <button id="btn_create_semester" class="btn btn-outline mb-3 btn-outline">Create Semester</button>
+          <div id="admin_subject_status" class="small-muted" style="margin-top:6px"></div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="muted">Create Course Offering</label>
+          <select id="sel_subject" class="form-select mb-1"></select>
+          <select id="sel_semester" class="form-select mb-1"></select>
+          <select id="sel_teacher" class="form-select mb-1"></select>
+          <button id="btn_create_offering" class="btn btn-success">Create Offering</button>
+
+          <div style="height:14px"></div>
+
+          <!-- Faculty manager -->
+          <div class="card-panel" style="margin-top:8px;padding:10px">
+            <h6 style="margin-bottom:8px">Faculty (Teachers)</h6>
+
+            <label class="muted">New Faculty</label>
+            <input id="fac_username" placeholder="username e.g. t_manoj" class="form-control mb-1"/>
+            <input id="fac_name" placeholder="Full name e.g. Prof. Manoj" class="form-control mb-1"/>
+            <div class="d-flex gap-2">
+              <button id="btn_create_faculty" class="btn btn-primary mb-2">Add Faculty</button>
+              <div id="faculty_status" class="small-muted" style="align-self:center"></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <label class="muted">Existing Faculty</label>
+            <select id="sel_faculty" class="form-select mb-1"></select>
+            <input id="fac_edit_username" placeholder="username" class="form-control mb-1"/>
+            <input id="fac_edit_name" placeholder="full name" class="form-control mb-1"/>
+            <div class="d-flex gap-2">
+              <button id="btn_update_faculty" class="btn btn-outline">Update</button>
+              <div id="fac_delete_wrap" style="align-self:center"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="card-panel">
+      <h5 style="margin-bottom:10px">Student Manager</h5>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <label class="muted">Add New Student</label>
+          <input id="stu_username" placeholder="username e.g. s_rahul" class="form-control mb-1"/>
+          <input id="stu_name" placeholder="Full name e.g. Rahul Kumar" class="form-control mb-1"/>
+          <div class="d-flex gap-2">
+            <button id="btn_create_student" class="btn btn-primary">Add Student</button>
+            <div id="student_create_status" class="small-muted" style="align-self:center"></div>
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:320px">
+          <label class="muted">Existing Students</label>
+          <select id="sel_student" class="form-select mb-1"></select>
+          <input id="stu_edit_username" placeholder="username" class="form-control mb-1"/>
+          <input id="stu_edit_name" placeholder="full name" class="form-control mb-1"/>
+          <div class="d-flex gap-2">
+            <button id="btn_update_student" class="btn btn-outline">Update</button>
+            <div id="stu_delete_wrap" style="align-self:center"></div>
+            <div id="student_manage_status" class="small-muted" style="align-self:center"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider" style="margin-top:12px"></div>
+      <h5 style="margin-top:10px">Current Data</h5>
+      <div id="admin_data" style="max-height:320px;overflow:auto;margin-top:6px"></div>
+    </div>
+  </div>
+  `;
+    }
+
+    async function adminBind() {
+      // load lists
+      const [subjects, sems, users] = await Promise.all([
+        fetch(API + '/api/subjects').then(r => r.json()),
+        fetch(API + '/api/semesters').then(r => r.json()),
+        fetch(API + '/api/users').then(r => r.json())
+      ]);
+
+      // subjects / semesters / teachers for offerings
+      document.getElementById('sel_subject').innerHTML = subjects.map(s => `<option value="${s.id}">${s.code} - ${s.title}</option>`).join('');
+      document.getElementById('sel_semester').innerHTML = sems.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+      document.getElementById('sel_teacher').innerHTML = users.filter(u => u.role === 'teacher').map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+
+      // faculty select (existing teachers)
+      const facultySelect = document.getElementById('sel_faculty');
+      const teachers = users.filter(u => u.role === 'teacher');
+      facultySelect.innerHTML = `<option value="">-- select faculty --</option>` + teachers.map(t => `<option value="${t.id}">${t.name} (${t.username || t.id})</option>`).join('');
+
+      // students
+      const studentSelect = document.getElementById('sel_student');
+      const students = users.filter(u => u.role === 'student');
+      studentSelect.innerHTML = `<option value="">-- select student --</option>` + students.map(s => `<option value="${s.id}">${s.name} (${s.username || s.id})</option>`).join('');
+
+      // ------------------- Subject create -------------------
+      document.getElementById('btn_create_subject').onclick = async () => {
+        const code = document.getElementById('s_code').value.trim();
+        const title = document.getElementById('s_title').value.trim();
+        const credits = Number(document.getElementById('s_credits').value) || 3;
+        if (!code || !title) { showInlineStatus('admin_subject_status', 'Enter code & title', 'error', 3000); toast('Enter subject code & title', 'error'); return; }
+        await fetch(API + '/api/subjects', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, title, credits }) });
+        showInlineStatus('admin_subject_status', 'Subject created', 'success');
+        toast('Subject created', 'success');
+        adminBind();
+      };
+
+      // ------------------- Semester create -------------------
+      document.getElementById('btn_create_semester').onclick = async () => {
+        const name = document.getElementById('sem_name').value.trim();
+        const ordinal = Number(document.getElementById('sem_ordinal').value) || null;
+        if (!name) { showInlineStatus('admin_subject_status', 'Enter semester name', 'error'); toast('Enter semester name', 'error'); return; }
+        await fetch(API + '/api/semesters', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name, ordinal }) });
+        showInlineStatus('admin_subject_status', 'Semester created', 'success');
+        toast('Semester created', 'success');
+        adminBind();
+      };
+
+      // ------------------- Offering create -------------------
+      document.getElementById('btn_create_offering').onclick = async () => {
+        const subject_id = Number(document.getElementById('sel_subject').value);
+        const semester_id = Number(document.getElementById('sel_semester').value);
+        const teacher_id = Number(document.getElementById('sel_teacher').value);
+        if (!subject_id || !semester_id) { showInlineStatus('admin_subject_status', 'Select subject and semester', 'error'); toast('Select subject and semester', 'error'); return; }
+        await fetch(API + '/api/course_offerings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ subject_id, semester_id, teacher_id }) });
+        showInlineStatus('admin_subject_status', 'Offering created', 'success');
+        toast('Offering created', 'success');
+        loadAdminData();
+      };
+
+      // ------------------- Faculty create -------------------
+      document.getElementById('btn_create_faculty').onclick = async () => {
+        const username = document.getElementById('fac_username').value.trim();
+        const name = document.getElementById('fac_name').value.trim();
+        if (!username || !name) { showInlineStatus('faculty_status', 'Enter username & name', 'error'); toast('Enter username & name', 'error'); return; }
+        await fetch(API + '/api/users', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ username, role: 'teacher', name }) });
+        showInlineStatus('faculty_status', 'Faculty added', 'success'); toast('Faculty added', 'success');
+        adminBind();
+      };
+
+      facultySelect.onchange = () => {
+        const id = Number(facultySelect.value);
+        if (!id) { document.getElementById('fac_edit_username').value = ''; document.getElementById('fac_edit_name').value = ''; document.getElementById('fac_delete_wrap').innerHTML = ''; return; }
+        const t = teachers.find(x => x.id === id);
+        if (t) {
+          document.getElementById('fac_edit_username').value = t.username || '';
+          document.getElementById('fac_edit_name').value = t.name || '';
+        }
+        // render inline delete button with confirm inside fac_delete_wrap
+        const wrap = document.getElementById('fac_delete_wrap');
+        wrap.innerHTML = '<button id="btn_delete_faculty" class="btn btn-outline btn-danger">Delete</button>';
+        document.getElementById('btn_delete_faculty').onclick = () => {
+          renderInlineConfirm(wrap, async () => {
+            await fetch(API + '/api/users/' + id, { method: 'DELETE' });
+            showInlineStatus('faculty_status', 'Faculty deleted', 'success'); toast('Faculty deleted', 'success');
+            adminBind();
+          }, () => {
+            wrap.innerHTML = '<button id="btn_delete_faculty" class="btn btn-outline btn-danger">Delete</button>';
+          });
+        };
+      };
+
+      document.getElementById('btn_update_faculty').onclick = async () => {
+        const id = Number(document.getElementById('sel_faculty').value);
+        if (!id) { showInlineStatus('faculty_status', 'Select a faculty to update', 'error'); toast('Select a faculty to update', 'error'); return; }
+        const username = document.getElementById('fac_edit_username').value.trim();
+        const name = document.getElementById('fac_edit_name').value.trim();
+        await fetch(API + '/api/users/' + id, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ username, name, role: 'teacher' }) });
+        showInlineStatus('faculty_status', 'Faculty updated', 'success'); toast('Faculty updated', 'success');
+        adminBind();
+      };
+
+      // ------------------- Student create / manage -------------------
+      document.getElementById('btn_create_student').onclick = async () => {
+        const username = document.getElementById('stu_username').value.trim();
+        const name = document.getElementById('stu_name').value.trim();
+        if (!username || !name) { showInlineStatus('student_create_status', 'Enter username & name', 'error'); toast('Enter username & name', 'error'); return; }
+        await fetch(API + '/api/users', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ username, role: 'student', name }) });
+        showInlineStatus('student_create_status', 'Student added', 'success'); toast('Student added', 'success');
+        adminBind();
+      };
+
+      studentSelect.onchange = () => {
+        const id = Number(studentSelect.value);
+        if (!id) { document.getElementById('stu_edit_username').value = ''; document.getElementById('stu_edit_name').value = ''; document.getElementById('stu_delete_wrap').innerHTML = ''; return; }
+        const s = students.find(x => x.id === id);
+        if (s) { document.getElementById('stu_edit_username').value = s.username || ''; document.getElementById('stu_edit_name').value = s.name || ''; }
+        const wrap = document.getElementById('stu_delete_wrap');
+        wrap.innerHTML = '<button id="btn_delete_student" class="btn btn-outline btn-danger">Delete</button>';
+        document.getElementById('btn_delete_student').onclick = () => {
+          renderInlineConfirm(wrap, async () => {
+            await fetch(API + '/api/users/' + id, { method: 'DELETE' });
+            showInlineStatus('student_manage_status', 'Student deleted', 'success'); toast('Student deleted', 'success');
+            adminBind();
+          }, () => {
+            wrap.innerHTML = '<button id="btn_delete_student" class="btn btn-outline btn-danger">Delete</button>';
+          });
+        };
+      };
+
+      document.getElementById('btn_update_student').onclick = async () => {
+        const id = Number(document.getElementById('sel_student').value);
+        if (!id) { showInlineStatus('student_manage_status', 'Select a student to update', 'error'); toast('Select a student to update', 'error'); return; }
+        const username = document.getElementById('stu_edit_username').value.trim();
+        const name = document.getElementById('stu_edit_name').value.trim();
+        await fetch(API + '/api/users/' + id, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ username, name, role: 'student' }) });
+        showInlineStatus('student_manage_status', 'Student updated', 'success'); toast('Student updated', 'success');
+        adminBind();
+      };
+
+      // refresh data view
+      loadAdminData();
+    }
+
+    async function loadAdminData() {
+      const r1 = await fetch(API + '/api/course_offerings').then(r => r.json());
+      const r2 = await fetch(API + '/api/users').then(r => r.json());
+      const r3 = await fetch(API + '/api/semesters').then(r => r.json());
+      document.getElementById('admin_data').innerHTML = `<pre style="font-size:13px;color:var(--muted)">${JSON.stringify({ offerings: r1, users: r2, semesters: r3 }, null, 2)}</pre>`;
+    }
+
+    // -------- Teacher view ----------
+    function teacherHtml() {
+      return `
+    <div class="panel-grid" style="margin-top:12px">
+      <div class="card-panel">
+        <h4 style="margin-bottom:10px">Teacher Dashboard (demo)</h4>
+        <label class="muted">Choose Offering</label>
+        <select id="sel_offering" class="form-select mb-2"></select>
+
+        <h5 style="margin-top:8px">Assessments</h5>
+        <input id="a_name" placeholder="Name e.g. Internal Test" class="form-control mb-1"/>
+        <input id="a_max" placeholder="Max Marks e.g. 20" type="number" class="form-control mb-1"/>
+        <input id="a_wt" placeholder="Weight percent e.g. 20" type="number" class="form-control mb-1"/>
+        <div class="d-flex gap-2">
+          <button id="btn_create_assessment" class="btn btn-primary mb-2">Create Assessment</button>
+          <div id="teacher_assess_status" class="small-muted" style="align-self:center"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h6>Manage Assessments</h6>
+        <div id="assessments_manage" style="max-height:240px;overflow:auto"></div>
+      </div>
+
+      <div class="card-panel">
+        <h5 style="margin-bottom:10px">Marks Entry</h5>
+        <div id="marks_ui"></div>
+        <div id="teacher_marks_status" class="small-muted" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+    <!-- Inline edit template (hidden, used to show editor) -->
+    <div id="inlineAssessmentEditor" style="display:none;position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:1300;width:520px;">
+      <div class="card-panel" style="padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <strong id="editor_title">Edit Assessment</strong>
+          <button id="editor_close" class="btn btn-outline">Close</button>
+        </div>
+        <div style="margin-top:10px">
+          <input id="editor_name" class="form-control mb-1" placeholder="Assessment name"/>
+          <input id="editor_max" type="number" class="form-control mb-1" placeholder="Max marks"/>
+          <input id="editor_wt" type="number" class="form-control mb-1" placeholder="Weight percent"/>
+          <div class="d-flex gap-2">
+            <button id="editor_save" class="btn btn-primary">Save</button>
+            <button id="editor_cancel" class="btn btn-outline">Cancel</button>
+            <div id="editor_status" class="small-muted" style="align-self:center"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+    }
+
+    async function teacherBind() {
+      const off = await fetch('/api/course_offerings').then(r => r.json());
+      document.getElementById('sel_offering').innerHTML = off.map(o => `<option value="${o.id}">${o.code} ${o.title} | ${o.semester} | ${o.teacher_name || ''}</option>`).join('');
+      document.getElementById('sel_offering').onchange = () => { loadMarksUI(); loadAssessmentManage(); };
+
+      document.getElementById('btn_create_assessment').onclick = async () => {
+        const course_offering_id = Number(document.getElementById('sel_offering').value);
+        const name = document.getElementById('a_name').value.trim();
+        const max_marks = Number(document.getElementById('a_max').value) || 20;
+        const weight_percent = Number(document.getElementById('a_wt').value) || 20;
+        if (!name) { showInlineStatus('teacher_assess_status', 'Enter assessment name', 'error'); toast('Enter assessment name', 'error'); return; }
+        await fetch('/api/assessments', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ course_offering_id, name, max_marks, weight_percent }) });
+        showInlineStatus('teacher_assess_status', 'Assessment created', 'success'); toast('Assessment created', 'success');
+        document.getElementById('a_name').value = ''; document.getElementById('a_max').value = ''; document.getElementById('a_wt').value = '';
+        loadMarksUI();
+        loadAssessmentManage();
+      };
+
+      // wire inline editor controls
+      document.getElementById('editor_close').onclick = () => hideEditor();
+      document.getElementById('editor_cancel').onclick = () => hideEditor();
+
+      document.getElementById('editor_save').onclick = async () => {
+        const id = Number(document.getElementById('editor_save').dataset.assId);
+        const name = document.getElementById('editor_name').value.trim();
+        const max_marks = Number(document.getElementById('editor_max').value);
+        const weight_percent = Number(document.getElementById('editor_wt').value);
+        if (!name || isNaN(max_marks) || isNaN(weight_percent)) { showInlineStatus('editor_status', 'Fill valid values', 'error'); return; }
+        await fetch('/api/assessments/' + id, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name, max_marks, weight_percent }) });
+        showInlineStatus('editor_status', 'Saved', 'success'); toast('Assessment updated', 'success');
+        hideEditor();
+        loadMarksUI();
+        loadAssessmentManage();
+      };
+
+      // initial load
+      loadMarksUI();
+      loadAssessmentManage();
+    }
+
+    async function loadMarksUI() {
+      const coId = Number(document.getElementById('sel_offering').value);
+      if (!coId) { document.getElementById('marks_ui').innerHTML = '<div class="muted">Select an offering above</div>'; return; }
+
+      const [assessments, marksResp, students] = await Promise.all([
+        fetch('/api/assessments/' + coId).then(r => r.json()),
+        fetch('/api/course/' + coId + '/marks').then(r => r.json()),
+        fetch('/api/offerings/' + coId + '/students').then(r => r.json())
+      ]);
+
+      // build map of existing marks by student+assessment
+      const marksMap = {};
+      marksResp.forEach(m => { marksMap[`${m.student_id}_${m.assessment_id}`] = m; });
+
+      // build table
+      let html = '<div class="table-responsive"><table class="table table-sm"><thead><tr><th>Student</th>';
+      for (const a of assessments) html += `<th class="text-center">${a.name}<br/><small class="small-muted">${a.max_marks} • ${a.weight_percent}%</small></th>`;
+      html += '<th class="text-center">Total %</th></tr></thead><tbody>';
+
+      for (const s of students) {
+        html += `<tr data-student="${s.id}"><td><strong>${s.name}</strong><div class="small-muted mono">ID: ${s.id}</div></td>`;
+        for (const a of assessments) {
+          const key = `${s.id}_${a.id}`;
+          const mk = marksMap[key];
+          const val = mk ? mk.marks_obtained : '';
+          // ensure min="0" and remove native spinner via CSS; we'll clamp via JS too
+          html += `<td class="text-center"><input data-assid="${a.id}" data-stuid="${s.id}" data-markid="${mk ? mk.mark_id : ''}" type="number" min="0" max="${a.max_marks}" step="any" class="form-control form-control-sm mark-input" value="${val}" style="margin:auto"/></td>`;
+        }
+        html += `<td class="text-center total-cell mono">--</td></tr>`;
+      }
+
+      html += '</tbody></table></div><div class="d-flex gap-2"><button id="btn_save_marks" class="btn btn-success">Save Changes</button><button id="btn_recalc" class="btn btn-outline">Recalculate Totals</button></div>';
+      document.getElementById('marks_ui').innerHTML = html;
+
+      // attach safety handlers to mark inputs (prevent negative and block '-' / 'e')
+      document.querySelectorAll('.mark-input').forEach(inp => {
+        // clamp on input (do not allow negative)
+        inp.addEventListener('input', () => {
+          if (inp.value === '') return;
+          const n = Number(inp.value);
+          if (isNaN(n)) return;
+          if (n < 0) inp.value = '0';
+          // optionally clamp to max if provided
+          const mx = inp.getAttribute('max');
+          if (mx !== null && mx !== '') {
+            const mxn = Number(mx);
+            if (!isNaN(mxn) && n > mxn) inp.value = String(mxn);
+          }
+        });
+        // prevent typing '-' or 'e' which can produce negative or exponential input
+        inp.addEventListener('keydown', (ev) => {
+          if (ev.key === '-' || ev.key === 'e' || ev.key === 'E') ev.preventDefault();
+        });
+        // paste sanitization
+        inp.addEventListener('paste', (ev) => {
+          const txt = (ev.clipboardData || window.clipboardData).getData('text');
+          if (/[-eE]/.test(txt)) ev.preventDefault();
+        });
+      });
+
+      // recalc totals
+      function recalcTotals() {
+        const rows = document.querySelectorAll('#marks_ui tbody tr');
+        rows.forEach(row => {
+          let sum = 0;
+          const stId = Number(row.dataset.student);
+          assessments.forEach(a => {
+            const inp = row.querySelector(`input[data-assid="${a.id}"][data-stuid="${stId}"]`);
+            const v = inp && inp.value !== '' ? Number(inp.value) : 0;
+            const contrib = (v / a.max_marks) * a.weight_percent;
+            sum += contrib;
+          });
+          row.querySelector('.total-cell').textContent = sum.toFixed(2);
+        });
+      }
+      recalcTotals();
+
+      // save marks (create or update)
+      document.getElementById('btn_save_marks').onclick = async () => {
+        const inputs = Array.from(document.querySelectorAll('.mark-input'));
+        for (const inp of inputs) {
+          const assId = Number(inp.dataset.assid);
+          const stId = Number(inp.dataset.stuid);
+          const markId = inp.dataset.markid ? Number(inp.dataset.markid) : null;
+          const val = inp.value === '' ? null : Number(inp.value);
+          if (val === null) continue;
+          if (markId) {
+            // update
+            await fetch('/api/marks/' + markId, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ marks_obtained: val }) });
+          } else {
+            // create
+            const res = await fetch('/api/marks', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ assessment_id: assId, student_id: stId, marks_obtained: val }) });
+            const js = await res.json();
+            if (js && js.id) inp.dataset.markid = js.id;
+          }
+        }
+        showInlineStatus('teacher_marks_status', 'Marks saved', 'success'); toast('Marks saved', 'success');
+        loadMarksUI();
+        loadAssessmentManage();
+      };
+
+      document.getElementById('btn_recalc').onclick = recalcTotals;
+    }
+
+    async function loadAssessmentManage() {
+      const coId = Number(document.getElementById('sel_offering').value);
+      const wrap = document.getElementById('assessments_manage');
+      if (!coId) { wrap.innerHTML = '<div class="muted">Select an offering to manage assessments</div>'; return; }
+      const assessments = await fetch('/api/assessments/' + coId).then(r => r.json());
+      if (!assessments || !assessments.length) { wrap.innerHTML = '<div class="muted">No assessments yet</div>'; return; }
+
+      // build list with edit and delete (delete uses inline confirm)
+      let html = '<div class="list-group">';
+      assessments.forEach(a => {
+        html += `<div class="list-group-item" data-ass="${a.id}" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <div style="flex:1">
+        <div style="font-weight:600">${a.name}</div>
+        <div class="small-muted">${a.max_marks} marks • ${a.weight_percent}%</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-outline btn-sm btn-edit-ass" data-id="${a.id}">Edit</button>
+        <div id="delwrap_${a.id}"></div>
+      </div>
+    </div>`;
+      });
+      html += '</div>';
+      wrap.innerHTML = html;
+
+      // Edit: open inline editor panel with data
+      document.querySelectorAll('.btn-edit-ass').forEach(btn => {
+        btn.onclick = () => {
+          const id = Number(btn.dataset.id);
+          const a = assessments.find(x => x.id === id);
+          if (!a) return;
+          openEditor(a);
+        };
+      });
+
+      // Delete: show inline confirm UI
+      assessments.forEach(a => {
+        const container = document.getElementById('delwrap_' + a.id);
+        if (!container) return;
+        // render initial Delete button
+        container.innerHTML = `<button class="btn btn-outline btn-danger btn-del-ass" data-id="${a.id}">Delete</button>`;
+        container.querySelector('.btn-del-ass').onclick = () => {
+          renderInlineConfirm(container, async () => {
+            await fetch('/api/assessments/' + a.id, { method: 'DELETE' });
+            showInlineStatus('teacher_assess_status', 'Assessment deleted', 'success'); toast('Assessment deleted', 'success');
+            loadMarksUI();
+            loadAssessmentManage();
+          }, () => {
+            container.innerHTML = `<button class="btn btn-outline btn-danger btn-del-ass" data-id="${a.id}">Delete</button>`;
+            container.querySelector('.btn-del-ass').onclick = () => {
+              // rebind to show confirm again
+              renderInlineConfirm(container, async () => {
+                await fetch('/api/assessments/' + a.id, { method: 'DELETE' });
+                showInlineStatus('teacher_assess_status', 'Assessment deleted', 'success'); toast('Assessment deleted', 'success');
+                loadMarksUI();
+                loadAssessmentManage();
+              }, () => {
+                container.innerHTML = `<button class="btn btn-outline btn-danger btn-del-ass" data-id="${a.id}">Delete</button>`;
+              });
+            };
+          });
+        };
+      });
+    }
+
+    // Inline editor helpers
+    function openEditor(assessment) {
+      const root = document.getElementById('inlineAssessmentEditor');
+      document.getElementById('editor_title').innerText = 'Edit Assessment';
+      document.getElementById('editor_name').value = assessment.name || '';
+      document.getElementById('editor_max').value = assessment.max_marks || '';
+      document.getElementById('editor_wt').value = assessment.weight_percent || '';
+      document.getElementById('editor_save').dataset.assId = assessment.id;
+      document.getElementById('editor_status').innerText = '';
+      root.style.display = 'block';
+    }
+    function hideEditor() {
+      const root = document.getElementById('inlineAssessmentEditor');
+      root.style.display = 'none';
+    }
+
+    // -------- Student view ----------
+    function studentHtml() {
+      return `
+  <div class="card-panel" style="margin-top:12px">
+    <h4>Student Dashboard (demo)</h4>
+    <div style="margin-top:8px">
+      <label class="muted">Choose student (demo users)</label>
+      <select id="sel_student" class="form-select mb-2"></select>
+    </div>
+    <div id="student_info" style="margin-top:10px"></div>
+  </div>
+  `;
+    }
+    async function studentBind() {
+      const studs = await fetch(API + '/api/students').then(r => r.json());
+      document.getElementById('sel_student').innerHTML = studs.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+      document.getElementById('sel_student').onchange = loadStudentInfo;
+      loadStudentInfo();
+    }
+    async function loadStudentInfo() {
+      const sid = Number(document.getElementById('sel_student').value);
+      if (!sid) return;
+      // show per-semester GPA history and CGPA
+      // get all semesters
+      const sems = await fetch(API + '/api/semesters').then(r => r.json());
+      let html = '';
+      for (const se of sems) {
+        const g = await fetch(API + `/api/student/${sid}/semester/${se.id}/gpa`).then(r => r.json());
+        html += `<div class="card-panel mb-2"><strong>${se.name}</strong> — GPA: <span class="mono">${Number(g.gpa).toFixed(3)}</span> (credits: ${g.total_credits})</div>`;
+      }
+      const cg = await fetch(API + `/api/student/${sid}/cgpa`).then(r => r.json());
+      html += `<div class="card-panel mb-3"><strong>CGPA:</strong> <span class="mono">${Number(cg.cgpa).toFixed(3)}</span> (total credits: ${cg.total_credits})</div>`;
+      // show per-course breakdown for semester 1 (demo)
+      const offerings = await fetch(API + '/api/course_offerings').then(r => r.json());
+      html += '<h5 class="muted">Course Breakdown (all offerings)</h5>';
+      for (const ofr of offerings) {
+        const sum = await fetch(API + `/api/student/${sid}/course/${ofr.id}/summary`).then(r => r.json());
+        html += `<div class="card-panel mb-2"><strong>${ofr.code} ${ofr.title}</strong><div style="margin-top:4px">Total%: ${sum.course_percent.toFixed(2)} — Grade: ${sum.grade_letter} (${sum.grade_point}) — Credits: ${sum.credits}</div></div>`;
+      }
+      document.getElementById('student_info').innerHTML = html;
+    }
+  </script>
+</body>
+
+</html>
